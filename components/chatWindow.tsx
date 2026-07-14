@@ -1,13 +1,13 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
+import { useChat } from "@ai-sdk/react"; //To create real-tome conversation chatbot
+import { DefaultChatTransport } from "ai"; //sends the req to backend to fetches the response as well
 import { useEffect, useState } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown from "react-markdown"; //convert AI markdown response to HTML
 
 export default function Chat() {
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({ api: "/api/chat" }), //showing it the way to backend
   });
 
   const [input, setInput] = useState("");
@@ -38,7 +38,7 @@ export default function Chat() {
           <div
             key={m.id}
             className={`mb-4 p-2 flex ${
-              m.role === "user" ? "justify-end" : "justify-start"
+              m.role === "user" ? "justify-end" : "justify-start" //the message has property as to who is sending the mesage
             }`}
           >
             <div
@@ -51,7 +51,7 @@ export default function Chat() {
               <span className="font-semibold text-white/70 block text-xs mb-1 uppercase tracking-wide">
                 {m.role === "user" ? "You" : "Gemini"}
               </span>
-              {m.parts.map((part, index) =>
+              {m.parts.map((part, index) =>  //bring versatile nature to the chat like images and bold text
                 part.type === "text" ? (
                   <ReactMarkdown key={index}>{part.text}</ReactMarkdown>
                 ) : null,
@@ -62,7 +62,7 @@ export default function Chat() {
 
         {status === "submitted" && (
           <div className="text-gray-400 dark:text-[#8B949E] mt-2 italic">
-            Gemini is typing...
+            AI is typing...
           </div>
         )}
       </div>

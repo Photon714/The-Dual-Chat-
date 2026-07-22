@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     const result = await pool.query(
-      "SELECT * FROM otps WHERE email = $1 AND code = $2 AND used = false ORDER BY id DESC LIMIT 1",
+      "SELECT * FROM otps WHERE email = $1 AND code = $2 AND used = false ORDER BY id DESC LIMIT 1",  //finding the reset token 
       [email, `reset:${resetToken}`]
     );
     const otp = result.rows[0];
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     await pool.query("UPDATE users SET password = $1 WHERE email = $2", [hashedPassword, email]);
-    await pool.query("UPDATE otps SET used = true WHERE email = $1 AND code = $2 AND used = false", [email, `reset:${resetToken}`]);
+    await pool.query("UPDATE otps SET used = true WHERE email = $1 AND code = $2 AND used = false", [email, `reset:${resetToken}`]); //marking used reset token
 
     return NextResponse.json({ message: "Password reset successful" });
   } catch {

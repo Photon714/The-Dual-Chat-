@@ -11,7 +11,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Username and password are required" }, { status: 400 });
     }
 
-    const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+    const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]); //$1 is a placeholder for the first argument in the array of username
     const user = result.rows[0];
 
     if (!user) {
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
       username: user.username,
     });
 
-    return NextResponse.json({ message: "Logged in", user: { email: user.email, username: user.username } });
+    return NextResponse.json({ message: "Logged in", user: { email: user.email, username: user.username } });  //passing it to authscreen for further use in the app
   } catch {
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }

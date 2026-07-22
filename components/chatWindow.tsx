@@ -5,7 +5,7 @@ import { DefaultChatTransport } from "ai"; //sends the req to backend to fetches
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown"; //convert AI markdown response to HTML
 
-export default function Chat() {
+export default function Chat({ onToggle }: { onToggle?: () => void }) {
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }), //showing it the way to backend
   });
@@ -25,6 +25,11 @@ export default function Chat() {
     }
   };
 
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.href = "/?auth=login";
+  };
+
   return (
     <div className="flex flex-col w-full max-w-xl py-24 mx-auto min-h-screen rounded-xl shadow-xl bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
       <button
@@ -32,6 +37,18 @@ export default function Chat() {
         className="fixed top-6 right-6 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-white/10 text-white border-white/20 hover:bg-white/20 dark:bg-[#1C1C1F] dark:border-[#2A2A2E] dark:hover:bg-[#26262A]"
       >
         {isDark ? "☀ Light" : "🌙 Dark"}
+      </button>
+      <button
+        onClick={onToggle}
+        className="fixed top-6 left-6 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20"
+      >
+        💬 User Chat
+      </button>
+      <button
+        onClick={handleLogout}
+        className="fixed top-6 right-32 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-red-500/20 text-red-300 border-red-500/30 hover:bg-red-500/30 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/20"
+      >
+        Logout
       </button>
       <div className="flex-1 overflow-y-auto px-7 mb-20">
         {messages.map((m) => (

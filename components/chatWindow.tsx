@@ -5,7 +5,7 @@ import { DefaultChatTransport } from "ai"; //sends the req to backend to fetches
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown"; //convert AI markdown response to HTML
 
-export default function Chat({ onToggle }: { onToggle?: () => void }) {
+export default function Chat({ onToggle }: { onToggle?: () => void }) { //ontoggle in the child itself do nothing but in the parent it will toggle the chat window
   const { messages, sendMessage, status } = useChat({
     transport: new DefaultChatTransport({ api: "/api/chat" }), //showing it the way to backend
   });
@@ -42,7 +42,7 @@ export default function Chat({ onToggle }: { onToggle?: () => void }) {
         onClick={onToggle}
         className="fixed top-6 left-6 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20"
       >
-        💬 User Chat
+         User Chat
       </button>
       <button
         onClick={handleLogout}

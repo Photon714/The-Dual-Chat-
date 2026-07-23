@@ -7,7 +7,7 @@ import ReactMarkdown from "react-markdown"; //convert AI markdown response to HT
 
 export default function Chat({ onToggle }: { onToggle?: () => void }) { //ontoggle in the child itself do nothing but in the parent it will toggle the chat window
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }), //showing it the way to backend
+    transport: new DefaultChatTransport({ api: "/api/chat-AI" }), //showing it the way to backend
   });
 
   const [input, setInput] = useState("");

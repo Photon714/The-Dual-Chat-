@@ -6,7 +6,7 @@ import Chat from "../components/chatWindow";
 import UserChat from "../components/UserChat";
 import AuthScreen from "../components/AuthScreen";
 
-function getPendingRoom(): string | null {
+function readPendingRoom(): string | null {
   if (typeof window === "undefined") return null;
   const cookie = document.cookie.split("; ").find((c) => c.startsWith("pending-room="));
   if (!cookie) return null;
@@ -17,16 +17,23 @@ function getPendingRoom(): string | null {
 
 export default function Home() {
   const searchParams = useSearchParams();
-  const authParam = searchParams.get("auth"); //fetches the auth param from the url 
-  const [pendingRoom] = useState<string | null>(getPendingRoom); //TO search for any rooms like if user comes through link but isnt logged in then its q-ed
-  const [mode, setMode] = useState<"ai" | "user">(pendingRoom ? "user" : "ai"); //CHECKKKIT
+  const authParam = searchParams.get("auth");//fetches the auth param from the url
+  const [pendingRoom, setPendingRoom] = useState<string | null>(null);//TO search for any rooms like if user comes through link but isnt logged in then its q-ed
+  const [mode, setMode] = useState<"ai" | "user">("ai");
   const [authenticated, setAuthenticated] = useState(false);
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
     fetch("/api/auth/me")
       .then((res) => {
-        if (res.ok) setAuthenticated(true);
+        if (res.ok) {
+          setAuthenticated(true);
+          const room = readPendingRoom();
+          if (room) {
+            setPendingRoom(room);
+            setMode("user");
+          }
+        }
       })
       .finally(() => setChecking(false));
   }, []);

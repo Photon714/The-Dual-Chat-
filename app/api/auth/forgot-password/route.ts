@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
 import pool from "@/lib/db";
+import nodemailer from "nodemailer";
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 export async function POST(req: Request) {
   try {
@@ -15,12 +24,16 @@ export async function POST(req: Request) {
     }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
-    const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString(); //coverts date into string 
 
-    await pool.query("UPDATE otps SET used = true WHERE email = $1 AND used = false", [email]); // all the previous otps are marked used except the curr one being not used ie set false
-    await pool.query("INSERT INTO otps (email, code, expires_at) VALUES ($1, $2, $3)", [email, code, expiresAt]);
+    await pool.query("UPDATE otps SET used = true WHERE email = $1 AND used = false", [email]);
+    await pool.query("INSERT INTO otps (email, code, expires_at) VALUES ($1, $2, NOW() + INTERVAL '10 minutes')", [email, code]);
 
-    console.log(`\n  OTP for ${email}: ${code}\n`); //fn sending to console
+    await transporter.sendMail({
+      from: process.env.GMAIL_USER,
+      to: email,
+      subject: "Your Dual Chat OTP Code",
+      html: `<p>Your OTP code is: <strong>${code}</strong></p><p>It expires in 10 minutes.</p>`,
+    });
 
     return NextResponse.json({ message: "If an account exists with this email, an OTP has been sent." });
   } catch {

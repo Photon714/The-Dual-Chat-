@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
 
 interface ChatMessage {
-  id?: number;
+  id?: number; //optional tho majorly its there
   username: string;
   text: string;
   timestamp: number;
@@ -14,7 +14,7 @@ interface UserChatProps {
   initialRoomCode?: string;
 }
 
-function getSocketInstance(): Socket {
+function getSocketInstance(): Socket { //to create fresh connection with each call
   return io(":3001", { transports: ["websocket", "polling"] });
 }
 
@@ -31,7 +31,7 @@ export default function UserChat({ initialRoomCode }: UserChatProps) {
   const [joinCode, setJoinCode] = useState("");
   const [hasMore, setHasMore] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
-  const socketRef = useRef<Socket | null>(null);
+  const socketRef = useRef<Socket | null>(null); //holds socketio connection
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const hasAutoJoined = useRef(false);
 
@@ -43,13 +43,13 @@ export default function UserChat({ initialRoomCode }: UserChatProps) {
       });
   }, []);
 
-  useEffect(() => {
+  useEffect(() => {  //scolls to the bottom ie follows the new message
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   useEffect(() => {
     if (savedUsername && !connected) {
-      const targetRoom = initialRoomCode || localStorage.getItem("dualchat-room");
+      const targetRoom = initialRoomCode || localStorage.getItem("dualchat-room"); //if the user is coming from the link then the initial room code will contain the room code
       if (targetRoom && !hasAutoJoined.current) {
         hasAutoJoined.current = true;
         setRoomCode(targetRoom);

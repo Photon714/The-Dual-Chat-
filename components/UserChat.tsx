@@ -12,13 +12,14 @@ interface ChatMessage {
 
 interface UserChatProps {
   initialRoomCode?: string;
+  onToggle?: () => void;
 }
 
 function getSocketInstance(): Socket { //to create fresh connection with each call
   return io(":3001", { transports: ["websocket", "polling"] });
 }
 
-export default function UserChat({ initialRoomCode }: UserChatProps) {
+export default function UserChat({ initialRoomCode, onToggle }: UserChatProps) {
   const [savedUsername, setSavedUsername] = useState("");
   const [roomCode, setRoomCode] = useState(initialRoomCode || "");
   const [inviteLink, setInviteLink] = useState("");
@@ -236,6 +237,14 @@ export default function UserChat({ initialRoomCode }: UserChatProps) {
   if (!connected) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
+        {onToggle && (
+          <button
+            onClick={onToggle}
+            className="fixed top-6 left-6 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-violet-500/20 text-violet-300 border-violet-500/30 hover:bg-violet-500/30 dark:bg-violet-500/10 dark:text-violet-400 dark:border-violet-500/20 dark:hover:bg-violet-500/20"
+          >
+             AI Chat
+          </button>
+        )}
         <div className="w-full max-w-sm p-8 rounded-xl shadow-xl bg-white dark:bg-[#161B22] border border-gray-300 dark:border-[#2A2F38]">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-[#E6EDF3]">
@@ -295,6 +304,14 @@ export default function UserChat({ initialRoomCode }: UserChatProps) {
             </span>
           </div>
           <div className="flex items-center gap-2">
+            {onToggle && (
+              <button
+                onClick={onToggle}
+                className="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors bg-violet-100 text-violet-700 hover:bg-violet-200 dark:bg-violet-900/30 dark:text-violet-400 dark:hover:bg-violet-900/50"
+              >
+                 AI
+              </button>
+            )}
             {inviteLink && (
               <button
                 onClick={copyInviteLink}

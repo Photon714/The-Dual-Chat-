@@ -52,11 +52,12 @@ function Home() {
 
   return (
     <>
-      {mode === "ai" ? (
+      <div className={mode === "ai" ? "" : "hidden"}>
         <Chat onToggle={() => setMode("user")} />
-      ) : (
+      </div>
+      <div className={mode === "user" ? "" : "hidden"}>
         <UserChat onToggle={() => setMode("ai")} initialRoomCode={pendingRoom || undefined} />
-      )}
+      </div>
     </>
   );
 }

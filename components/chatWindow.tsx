@@ -41,20 +41,20 @@ export default function Chat({ onToggle }: { onToggle?: () => void }) { //ontogg
             {onToggle && (
               <button
                 onClick={onToggle}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20"
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-emerald-500/15 text-emerald-700 border border-emerald-500/30 hover:bg-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20"
               >
                 User Chat
               </button>
             )}
             <button
               onClick={() => setIsDark(!isDark)}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-white/10 text-white border border-white/20 hover:bg-white/20 dark:bg-[#1C1C1F] dark:border-[#2A2A2E] dark:hover:bg-[#26262A]"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-black/5 text-gray-800 border border-gray-300 hover:bg-black/10 dark:bg-[#1C1C1F] dark:text-white dark:border-[#2A2A2E] dark:hover:bg-[#26262A]"
             >
               {isDark ? "☀ Light" : "🌙 Dark"}
             </button>
             <button
               onClick={handleLogout}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/20"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-red-500/10 text-red-700 border border-red-500/30 hover:bg-red-500/20 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/20"
             >
               Logout
             </button>

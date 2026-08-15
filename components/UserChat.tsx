@@ -16,7 +16,7 @@ interface UserChatProps {
 }
 
 function getSocketInstance(): Socket { //to create fresh connection with each call
-  return io(":3001", { transports: ["websocket", "polling"] });
+  return io(process.env.NEXT_PUBLIC_SOCKET_URL || ":3001", { transports: ["websocket", "polling"] });
 }
 
 export default function UserChat({ initialRoomCode, onToggle }: UserChatProps) {
@@ -54,7 +54,7 @@ export default function UserChat({ initialRoomCode, onToggle }: UserChatProps) {
       if (targetRoom && !hasAutoJoined.current) {
         hasAutoJoined.current = true;
         setRoomCode(targetRoom);
-        setInviteLink(`http://${window.location.hostname}:3000/chat-User/${targetRoom}`);
+        setInviteLink(`${window.location.origin}/chat-User/${targetRoom}`);
 
         const socket = getSocketInstance();
         socketRef.current = socket;
@@ -113,7 +113,7 @@ export default function UserChat({ initialRoomCode, onToggle }: UserChatProps) {
   const handleCreateRoom = () => {
     const code = generateRoomCode();
     setRoomCode(code);
-    setInviteLink(`http://${window.location.hostname}:3000/chat-User/${code}`);
+    setInviteLink(`${window.location.origin}/chat-User/${code}`);
     localStorage.setItem("dualchat-room", code);
     joinRoom(code);
   };
@@ -128,7 +128,7 @@ export default function UserChat({ initialRoomCode, onToggle }: UserChatProps) {
   };
 
   const joinRoom = (code: string) => {  //joining the room with the code
-    setInviteLink(`http://${window.location.hostname}:3000/chat-User/${code}`);
+    setInviteLink(`${window.location.origin}/chat-User/${code}`);
     localStorage.setItem("dualchat-room", code); //storing in the local storage in case of refresh
 
     const socket = getSocketInstance(); //socket port 
@@ -236,7 +236,7 @@ export default function UserChat({ initialRoomCode, onToggle }: UserChatProps) {
 
   if (!connected) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
+      <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
         {onToggle && (
           <button
             onClick={onToggle}

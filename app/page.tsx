@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Chat from "../components/chatWindow";
 import UserChat from "../components/UserChat";
@@ -15,7 +15,7 @@ function readPendingRoom(): string | null {
   return roomCode || null;
 }
 
-export default function Home() {
+function Home() {
   const searchParams = useSearchParams();
   const authParam = searchParams.get("auth");//fetches the auth param from the url
   const [pendingRoom, setPendingRoom] = useState<string | null>(null);//TO search for any rooms like if user comes through link but isnt logged in then its q-ed
@@ -58,5 +58,21 @@ export default function Home() {
         <UserChat onToggle={() => setMode("ai")} initialRoomCode={pendingRoom || undefined} />
       )}
     </>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Home />
+    </Suspense>
+  );
+}
+
+function Loading() {
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F]">
+      <div className="text-gray-400 dark:text-[#8B949E]">Loading...</div>
+    </div>
   );
 }

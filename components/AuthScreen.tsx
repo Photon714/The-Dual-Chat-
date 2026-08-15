@@ -152,7 +152,7 @@ export default function AuthScreen({ onAuth }: AuthScreenProps) { //using props 
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
       <div className="w-full max-w-sm p-8 rounded-xl shadow-xl bg-white dark:bg-[#161B22] border border-gray-300 dark:border-[#2A2F38]">
         <h2 className="text-xl font-bold text-gray-900 dark:text-[#E6EDF3] mb-2 text-center">
           {view === "login" && "Welcome Back"}

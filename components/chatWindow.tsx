@@ -31,30 +31,42 @@ export default function Chat({ onToggle }: { onToggle?: () => void }) { //ontogg
   };
 
   return (
-    <div className="flex flex-col w-full max-w-xl py-24 mx-auto min-h-screen rounded-xl shadow-xl bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
-      <button
-        onClick={() => setIsDark(!isDark)}
-        className="fixed top-6 right-6 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-white/10 text-white border-white/20 hover:bg-white/20 dark:bg-[#1C1C1F] dark:border-[#2A2A2E] dark:hover:bg-[#26262A]"
-      >
-        {isDark ? "☀ Light" : "🌙 Dark"}
-      </button>
-      <button
-        onClick={onToggle}
-        className="fixed top-6 left-6 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-emerald-500/20 text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20"
-      >
-         User Chat
-      </button>
-      <button
-        onClick={handleLogout}
-        className="fixed top-6 right-32 px-3 py-1.5 rounded-full text-xs font-medium border transition-colors bg-red-500/20 text-red-300 border-red-500/30 hover:bg-red-500/30 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/20"
-      >
-        Logout
-      </button>
-      <div className="flex-1 overflow-y-auto px-7 mb-20">
+    <div className="flex flex-col w-full h-dvh max-w-xl mx-auto bg-linear-to-r from-taupe-700 to-zinc-900 dark:from-[#171717] dark:to-[#0D0D0F] transition-colors duration-300">
+      <header className="shrink-0 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-2">
+        <div className="flex items-center justify-between gap-2 p-2 rounded-xl bg-white/90 dark:bg-[#161B22]/90 backdrop-blur border border-gray-200 dark:border-[#2A2F38]">
+          <span className="text-sm font-bold text-gray-900 dark:text-[#E6EDF3] px-1.5">
+            AI Chat
+          </span>
+          <div className="flex items-center gap-1.5">
+            {onToggle && (
+              <button
+                onClick={onToggle}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20 dark:hover:bg-emerald-500/20"
+              >
+                User Chat
+              </button>
+            )}
+            <button
+              onClick={() => setIsDark(!isDark)}
+              className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-white/10 text-white border border-white/20 hover:bg-white/20 dark:bg-[#1C1C1F] dark:border-[#2A2A2E] dark:hover:bg-[#26262A]"
+            >
+              {isDark ? "☀ Light" : "🌙 Dark"}
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors bg-red-500/20 text-red-300 border border-red-500/30 hover:bg-red-500/30 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20 dark:hover:bg-red-500/20"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         {messages.map((m) => (
           <div
             key={m.id}
-            className={`mb-4 p-2 flex ${
+            className={`flex ${
               m.role === "user" ? "justify-end" : "justify-start" //the message has property as to who is sending the mesage
             }`}
           >
@@ -66,7 +78,7 @@ export default function Chat({ onToggle }: { onToggle?: () => void }) { //ontogg
               }`}
             >
               <span className="font-semibold text-white/70 block text-xs mb-1 uppercase tracking-wide">
-                {m.role === "user" ? "You" : "Gemini"}
+                {m.role === "user" ? "You" : "AI"}
               </span>
               {m.parts.map((part, index) =>  //bring versatile nature to the chat like images and bold text
                 part.type === "text" ? (
@@ -78,7 +90,7 @@ export default function Chat({ onToggle }: { onToggle?: () => void }) { //ontogg
         ))}
 
         {status === "submitted" && (
-          <div className="text-gray-400 dark:text-[#8B949E] mt-2 italic">
+          <div className="text-gray-400 dark:text-[#8B949E] text-sm italic">
             AI is typing...
           </div>
         )}
@@ -86,15 +98,17 @@ export default function Chat({ onToggle }: { onToggle?: () => void }) { //ontogg
 
       <form
         onSubmit={handleSubmit}
-        className="fixed left-0 right-0 bottom-0 w-full max-w-md mb-8 mx-auto border rounded-xl shadow-xl transition-colors bg-white border-gray-300 dark:bg-[#161B22] dark:border-[#2A2F38]"
+        className="shrink-0 px-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
       >
-        <input
-          className="w-full p-3 outline-none rounded-xl transition-shadow bg-transparent text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-violet-400 dark:text-[#E6EDF3] dark:placeholder-[#8B949E] dark:focus:ring-[#5EEAD4]"
-          value={input}
-          placeholder="Say something to Gemini..."
-          onChange={(e) => setInput(e.target.value)}
-          disabled={status !== "ready"}
-        />
+        <div className="border rounded-xl shadow-xl transition-colors bg-white border-gray-300 dark:bg-[#161B22] dark:border-[#2A2F38]">
+          <input
+            className="w-full p-3 outline-none rounded-xl transition-shadow bg-transparent text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-violet-400 dark:text-[#E6EDF3] dark:placeholder-[#8B949E] dark:focus:ring-[#5EEAD4]"
+            value={input}
+            placeholder="Say something to Gemini..."
+            onChange={(e) => setInput(e.target.value)}
+            disabled={status !== "ready"}
+          />
+        </div>
       </form>
     </div>
   );
